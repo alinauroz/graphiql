@@ -36,7 +36,10 @@ type Dispatcher = DispatchWithEffects<AT, ActionState>;
 export interface SessionHandlers {
   changeOperation: (operation: string) => void;
   changeVariables: (variables: string) => void;
-  executeOperation: () => Promise<void>;
+  executeOperation: (
+    session: SessionState,
+    operationName?: string,
+  ) => Promise<void>;
   operationError: (payload: { error: Error; sessionId: number }) => void;
   dispatch: Dispatcher;
 }
@@ -91,6 +94,8 @@ export function sessionReducer(
     }
     case actionTypes.operation_succeeded: {
       state.results.text = payload;
+      state.results.json = JSON.parse(payload);
+      state.results.formattedText = JSON.stringify(state.results.json, null, 2);
       state.operationErrors = null;
       return state;
     }
@@ -144,20 +149,22 @@ export function SessionProvider({
       payload: variables,
       sessionId,
     });
-  const executeOperation = async (currentState: SessionState) => {
+  const executeOperation = async (
+    session: SessionState,
+    operationName?: string,
+  ) => {
     try {
       dispatch({
         type: actionTypes.operation_requested,
       });
 
       const fetchValues: GraphQLParams = {
-        query: currentState?.operation?.text ?? '',
+        query: session?.operation?.text ?? '',
       };
-      if (currentState.variables && currentState.variables.text) {
-        fetchValues.variables = currentState.variables.text;
+      if (session.variables && session.variables.text) {
+        fetchValues.variables = session.variables.text;
       }
       const result = await fetcher(fetchValues, config);
-      console.log({ result });
       dispatch({
         type: actionTypes.operation_succeeded,
         sessionId,

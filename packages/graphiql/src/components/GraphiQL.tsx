@@ -49,7 +49,6 @@ import {
   MigrationContextProvider,
   MigrationContext,
 } from '../state/MigrationContext';
-import { SchemaContext, SchemaProvider } from '../state/GraphiQLSchemaProvider';
 
 const DEFAULT_DOC_EXPLORER_WIDTH = 350;
 
@@ -410,7 +409,6 @@ class GraphiQLInternals extends React.Component<
               this._queryHistory = node;
             }}
             operationName={this.state.operationName}
-            query={this.state.query}
             variables={this.state.variables}
             onSelectQuery={this.handleSelectHistoryQuery}
             storage={this._storage}
@@ -453,7 +451,6 @@ class GraphiQLInternals extends React.Component<
             onMouseDown={this.handleResizeStart}>
             <div className="queryWrap" style={queryWrapStyle}>
               <QueryEditor
-                value={this.state.query}
                 onEdit={this.handleEditQuery}
                 onHintInformationRender={this.handleHintInformationRender}
                 onClickReference={this.handleClickReference}
@@ -497,13 +494,6 @@ class GraphiQLInternals extends React.Component<
                 </div>
               )}
               <ResultViewer
-                registerRef={n => {
-                  this.resultViewerElement = n;
-                }}
-                ref={c => {
-                  this.resultComponent = c;
-                }}
-                value={this.context?.results?.text}
                 editorTheme={this.props.editorTheme}
                 ResultsTooltip={this.props.ResultsTooltip}
                 ImagePreview={ImagePreview}

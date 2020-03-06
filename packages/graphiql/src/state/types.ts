@@ -2,6 +2,8 @@
 export type File = {
   uri: string;
   text?: string;
+  json?: JSON
+  formattedText?: string;
 };
 
 
