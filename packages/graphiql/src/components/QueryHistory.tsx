@@ -60,6 +60,7 @@ type QueryHistoryProps = {
   queryID?: number;
   onSelectQuery: HandleSelectQueryFn;
   storage: StorageAPI;
+  MAX_HISTORY_LENGTH?: number;
 };
 
 type QueryHistoryState = {

@@ -14,6 +14,8 @@ import onHasCompletion from '../utility/onHasCompletion';
 import commonKeys from '../utility/commonKeys';
 import { SizerComponent } from 'src/utility/CodeMirrorSizer';
 
+const keyMap = 'vim';
+
 const md = new MD();
 const AUTO_COMPLETE_AFTER_KEY = /^[a-zA-Z0-9_@(]$/;
 
@@ -82,6 +84,7 @@ export class QueryEditor extends React.Component<QueryEditorProps, {}>
     require('codemirror-graphql/info');
     require('codemirror-graphql/jump');
     require('codemirror-graphql/mode');
+    require('codemirror-graphql/editor-modes/vim.js');
 
     const editor: CM.Editor = (this.editor = CodeMirror(this._node, {
       value: this.props.value || '',
@@ -89,7 +92,7 @@ export class QueryEditor extends React.Component<QueryEditorProps, {}>
       tabSize: 2,
       mode: 'graphql',
       theme: this.props.editorTheme || 'graphiql',
-      keyMap: 'sublime',
+      keyMap,
       autoCloseBrackets: true,
       matchBrackets: true,
       showCursorWhenSelecting: true,

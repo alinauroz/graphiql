@@ -445,6 +445,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
         className="graphiql-container">
         <div className="historyPaneWrap" style={historyPaneStyle}>
           <QueryHistory
+            MAX_HISTORY_LENGTH={30}
             ref={node => {
               this._queryHistory = node;
             }}
