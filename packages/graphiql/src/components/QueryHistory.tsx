@@ -13,10 +13,20 @@ import HistoryQuery, {
   HandleToggleFavoriteFn,
   HandleSelectQueryFn,
 } from './HistoryQuery';
-import StorageAPI from 'src/utility/StorageAPI';
+
+import StorageAPI from '../utility/StorageAPI';
+
+const historyVars = new StorageAPI();
+
+let MAX_HISTORY_LENGTH: number = 2;
+
+alert(historyVars.get('max_history_length'));
+
+if (historyVars.get('max_history_length')) {
+  MAX_HISTORY_LENGTH = Number(historyVars.get('max_history_length'));
+}
 
 const MAX_QUERY_SIZE = 100000;
-const MAX_HISTORY_LENGTH = 20;
 
 const shouldSaveQuery = (
   query?: string,
@@ -64,6 +74,14 @@ type QueryHistoryProps = {
 
 type QueryHistoryState = {
   queries: Array<QueryStoreItem>;
+  historyLength: number;
+};
+
+const changeHistoryLength = (newLength: number) => {
+  historyVars.set('max_history_length', String(newLength));
+  MAX_HISTORY_LENGTH = newLength;
+  location.reload();
+  // alert(`History Size Changed to ${newLength}`);
 };
 
 export class QueryHistory extends React.Component<
@@ -85,8 +103,15 @@ export class QueryHistory extends React.Component<
     const historyQueries = this.historyStore.fetchAll();
     const favoriteQueries = this.favoriteStore.fetchAll();
     const queries = historyQueries.concat(favoriteQueries);
-    this.state = { queries };
+    this.state = {
+      queries,
+      historyLength: MAX_HISTORY_LENGTH,
+    };
   }
+
+  handleOnHistoryLengthFieldChange = (e: any) => {
+    this.setState({ historyLength: e.target.value });
+  };
 
   render() {
     const queries = this.state.queries.slice().reverse();
@@ -101,11 +126,30 @@ export class QueryHistory extends React.Component<
         />
       );
     });
+
+    const label_ = 'Set History Length';
+
     return (
       <section aria-label="History">
         <div className="history-title-bar">
           <div className="history-title">{'History'}</div>
           <div className="doc-explorer-rhs">{this.props.children}</div>
+        </div>
+        <div className="history-setting-bar">
+          <label className="history-setting-label">{label_}</label>
+          <input
+            type="number"
+            placeholder="Max Length"
+            className="history-setting-field"
+            onChange={this.handleOnHistoryLengthFieldChange}
+            readOnly={false}
+          />
+          <input
+            type="button"
+            value="Set"
+            className="history-setting-button"
+            onClick={() => changeHistoryLength(this.state.historyLength)}
+          />
         </div>
         <ul className="history-contents">{queryNodes}</ul>
       </section>

@@ -3,7 +3,7 @@
 }
 
 .graphiql-container .history-contents {
-  margin: 0;
+  margin-top: 50px;
   padding: 0;
 }
 
@@ -40,6 +40,40 @@
   color: inherit;
 }
 
+.history-setting-bar {
+  flex: 1;
+  font-weight: bold;
+  overflow-x: hidden;
+  padding: 10px 0 10px 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  user-select: text;
+  white-space: nowrap;
+}
+
+.history-setting-field {
+  border : 0px;
+  float : left;
+  font-size : 11px;
+  margin-top : "4px";
+  width : calc(100% - 60px)
+}
+
+.history-setting-field:focus, .history-setting-button:focus {
+  outline : none;
+}
+
+.history-setting-button {
+  background-attachment: transparent;
+  border : 0px;
+}
+
+.history-setting-label {
+  font-size : 11px;
+  float : left;
+  color : rgb(80, 80, 80);
+}
+
 .graphiql-container .history-contents input {
   flex-grow: 1;
 }
@@ -51,6 +85,7 @@
 .graphiql-container .history-contents button {
   cursor: pointer;
   text-align: left;
+  margin-top : 5px;
 }
 
 .graphiql-container .history-contents .history-label {
